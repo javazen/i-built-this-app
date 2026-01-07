@@ -1,9 +1,9 @@
 import React from 'react'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowRightIcon, EyeIcon, RocketIcon, SparklesIcon, UsersIcon } from 'lucide-react'
-import StatsCard from './stats-card'
+import StatsCard from '@/components/landing-page/stats-card'
 
 const LiveBadge = () => {
   return (
