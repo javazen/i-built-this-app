@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/common/header";
+import Footer from "@/components/common/footer";
 
 /*
 const geistSans = Geist({
@@ -35,9 +37,9 @@ export default function RootLayout({
       <body
         className={`${outfit.className} antialiased`}
       >
-        <h1>Header goes here</h1>
+        <Header />
         {children}
-        <h2>Footer goes here</h2>
+        <Footer />
       </body>
     </html>
   );
