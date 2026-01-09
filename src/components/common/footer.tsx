@@ -1,3 +1,7 @@
 export default function Footer() {
-  return <div>Footer</div>;
+  return (
+  <footer className="border-t bg-muted/20 py-12">
+    iBuiltThis Inc. All rights reserved
+  </footer>
+  );
 }
