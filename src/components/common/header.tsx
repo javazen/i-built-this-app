@@ -1,5 +1,6 @@
-import { SparkleIcon } from "lucide-react";
+import { CompassIcon, HomeIcon, SparkleIcon, SparklesIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 const Logo = () => {
   return (
@@ -15,7 +16,50 @@ const Logo = () => {
 }
 
 export default function Header() {
-  return <div>
-    <Logo />
-  </div>;
+  const isSignedIn = true;
+  return <header className="sticky top-0 z-50 border-b
+   bg-background/90 backdrop-blur supports-backdrop-blur:bg-background/60">
+    <div className="wrapper px-12">
+      <div className="flex items-center justify-between">
+        <Logo />
+        <nav className="flex items-center gap-1">
+          <Link 
+            href="/" 
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium 
+            text-muted-foreground hover:text-foreground transition-colors hover:bg-muted/50">
+            <HomeIcon className="size-4" />
+            <span>Home</span>
+          </Link>
+          <Link 
+            href="/explore" 
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium 
+            text-muted-foreground hover:text-foreground transition-colors hover:bg-muted/50">
+            <CompassIcon className="size-4" />
+            <span>Explore</span>
+          </Link>
+        </nav>
+        <div className="flex items-center gap-3">
+          {isSignedIn ? (
+            <>
+            <Button asChild>
+              <Link href="/submit">
+                <SparklesIcon className='size-4' />
+                Submit Project
+              </Link>
+            </Button>
+            {/** Clerk Auth here */}
+            <Button variant={"ghost"}>
+              <UserIcon className='size-4' />
+            </Button>
+            </>
+          ) : (
+            <>
+            <Button variant="ghost">Sign In</Button>
+            <Button>Sign Up</Button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  </header>;
 }
