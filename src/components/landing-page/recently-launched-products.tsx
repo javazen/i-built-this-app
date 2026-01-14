@@ -1,32 +1,21 @@
 import { CalendarIcon, RocketIcon } from "lucide-react";
 import SectionHeader from "@/components/common/section-header";
-import ProductCard from "../products/product-card";
-import EmptyState from "../common/empty-state";
-
-/*
-const recentlyLaunchedProductsData = [
-  {
-    id: 1,
-    name: "ParityKit",
-    description: "A toolkit for creating parity products",
-    tags: ["SaaS", "Pricing", "Global"],
-    votes: 619,
-    isFeatured: true,
-  },
-  {
-    id: 2,
-    name: "New Course",
-    description: "Learn to build production-ready full-stack apps with Next.js",
-    tags: ["Next.js", "Full-stack", "Course"],
-    votes: 124,
-    isFeatured: false,
-  },
-] */
-const recentlyLaunchedProductsData = [
-]
+import ProductCard from "@/components/products/product-card";
+import EmptyState from "@/components/common/empty-state";
+import { getRecentlyLaunchedProducts } from "@/lib/products/product-select";
 
 
-export default function RecentlyLaunchedProducts() {
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * RecentlyLaunchedProducts component.
+ *
+ * Displays a list of products that have been launched in the last week.
+ *
+ * If no products have been launched, displays an empty state with a message.
+ */
+/*******  d301262e-dbe4-4e96-8493-e440d78e2fd4  *******/
+export default async function RecentlyLaunchedProducts() {
+  const recentlyLaunchedProductsData = await getRecentlyLaunchedProducts();
   return (
     <section className="py-20">
       <div className="wrapper space-y-12">
