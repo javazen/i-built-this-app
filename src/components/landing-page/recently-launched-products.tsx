@@ -1,3 +1,4 @@
+"use cache";
 import { CalendarIcon, RocketIcon } from "lucide-react";
 import SectionHeader from "@/components/common/section-header";
 import ProductCard from "@/components/products/product-card";
@@ -5,15 +6,6 @@ import EmptyState from "@/components/common/empty-state";
 import { getRecentlyLaunchedProducts } from "@/lib/products/product-select";
 
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * RecentlyLaunchedProducts component.
- *
- * Displays a list of products that have been launched in the last week.
- *
- * If no products have been launched, displays an empty state with a message.
- */
-/*******  d301262e-dbe4-4e96-8493-e440d78e2fd4  *******/
 export default async function RecentlyLaunchedProducts() {
   const recentlyLaunchedProductsData = await getRecentlyLaunchedProducts();
   return (

@@ -2,6 +2,7 @@ import { CompassIcon, HomeIcon, SparkleIcon, SparklesIcon, UserIcon } from "luci
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Suspense } from "react";
 
 const Logo = () => {
   return (
@@ -40,6 +41,7 @@ export default function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
+          <Suspense fallback={<div>Loading...</div>}>
             <SignedOut>
               <SignInButton />
               <SignUpButton>
@@ -57,6 +59,7 @@ export default function Header() {
               </Button>
               <UserButton />
             </SignedIn>
+          </Suspense>
         </div>
       </div>
     </div>
