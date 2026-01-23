@@ -6,6 +6,7 @@ export default function SubmitPage() {
   return (
     <section className="py-20">
       <div className="wrapper">
+        <div className="mb-12">
         <SectionHeader
           title="Submit Your Product"
           icon={SparklesIcon}
@@ -13,6 +14,7 @@ export default function SubmitPage() {
         />
         <div className="max-w-2xl mx-auto">
           <ProductSubmitForm />
+        </div>
         </div>
       </div>
     </section>
