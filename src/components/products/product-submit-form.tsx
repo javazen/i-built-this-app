@@ -1,11 +1,23 @@
 "use client";
 import FormField from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
-import { SparklesIcon } from "lucide-react";
+import { addProductAction } from "@/lib/products/product-actions";
+import { Loader2Icon, SparklesIcon } from "lucide-react";
+import { useActionState } from "react";
+
+const initialState = {
+  success: false,
+  error: {},
+  message: "",
+};
 
 export default function ProductSubmitForm() {
+  const [state, formAction, isPending] = useActionState(addProductAction, initialState);
+
+  // console.log(state);
+
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" action={formAction}>
       <FormField 
         label="Product Name"
         name="name"
@@ -65,15 +77,25 @@ export default function ProductSubmitForm() {
         error=""
         helperText="Comma-separated tags"
       />
-
-      <Button size="lg" className="w-full">
-        <SparklesIcon className="size-4" />
-        Submit Product
+      <Button type="submit" size="lg" className="w-full">
+        {isPending ? (
+          <Loader2Icon className="size-4 animate-spin" />
+        ) : (
+          <>
+            <SparklesIcon className="size-4" />
+            Submit Product
+          </>
+        )}
       </Button>
     </form>
   );
 }
 
 /*
-      <h1>Product Submit Form</h1>
+      {isPending ? (
+        <p>Loading...</p>
+      ) : (
+          <SparklesIcon className="size-4" />
+          Submit Product
+      )}
 */
