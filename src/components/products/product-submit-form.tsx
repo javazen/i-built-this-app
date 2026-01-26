@@ -14,7 +14,7 @@ const initialState = {
 export default function ProductSubmitForm() {
   const [state, formAction, isPending] = useActionState(addProductAction, initialState);
 
-  // console.log(state);
+  const { errors, message, success } = state;
 
   return (
     <form className="space-y-6" action={formAction}>
@@ -25,7 +25,7 @@ export default function ProductSubmitForm() {
         placeholder="My Awesome Product"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.name}
       />
       <FormField 
         label="Slug"
@@ -34,7 +34,7 @@ export default function ProductSubmitForm() {
         placeholder="my-awesome-product"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.slug}
         helperText="URL-friendly version of your product name"
       />
       <FormField 
@@ -44,7 +44,7 @@ export default function ProductSubmitForm() {
         placeholder="Detailed description of your product - tell us more about it"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.description}
         textArea={true}
       />
       <FormField 
@@ -54,7 +54,7 @@ export default function ProductSubmitForm() {
         placeholder="Brief catchy tagline for the product"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.tagline}
         helperText="URL-friendly version of your product name"
       />
       <FormField 
@@ -64,7 +64,7 @@ export default function ProductSubmitForm() {
         placeholder="https://www.yourproduct.com"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.websiteUrl}
         helperText="Enter your product's website or landing page"
       />
       <FormField 
@@ -74,7 +74,7 @@ export default function ProductSubmitForm() {
         placeholder="AI, SaaS, Productivity"
         required
         onChange={() => {}}
-        error=""
+        error={errors?.tags}
         helperText="Comma-separated tags"
       />
       <Button type="submit" size="lg" className="w-full">
