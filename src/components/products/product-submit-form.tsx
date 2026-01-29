@@ -92,10 +92,4 @@ export default function ProductSubmitForm() {
 }
 
 /*
-      {isPending ? (
-        <p>Loading...</p>
-      ) : (
-          <SparklesIcon className="size-4" />
-          Submit Product
-      )}
 */
