@@ -1,6 +1,9 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+import { db } from "@/db";
+import { products } from "@/db/schema";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { productSchema } from "./product-validations";
 
 type FormState = {
@@ -16,7 +19,7 @@ export const addProductAction = async (
   console.log(formData);
 
   try {
-    const { userId } = await auth();
+    const { userId, emailAddresses } = await auth();
     if (!userId) {
       return {
         success: false,
@@ -24,6 +27,9 @@ export const addProductAction = async (
         message: "You must be signed in to submit a product!"
       }
     }
+
+    const user = await currentUser();
+    const userEmail = user?.primaryEmailAddress?.emailAddress || "anonymous";
 
     // validate the data
     const rawFormData = Object.fromEntries(formData.entries());
@@ -36,12 +42,43 @@ export const addProductAction = async (
         message: "Invalid data"
       }
     } 
-    const data = validatedData.data;
+    const {name, slug, description, tagline, websiteUrl, tags} = validatedData.data;
+    
+    const tagsArray = tags 
+      ? tags.filter((tag) => typeof tag === 'string')
+      : [];
+      
+    await db
+    .insert(products)
+    .values({
+      name, 
+      slug, 
+      description, 
+      tagline, 
+      websiteUrl, 
+      tags:tagsArray,
+      status: 'pending', 
+      submittedBy: userEmail, 
+      userId
+    })
 
-
+    return {
+      success: true,
+      errors: {},
+      message: "Product submitted successfully! It will be reviewed soon."
+    }
 
   } catch (error) {
     console.error(error);
+
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        errors: error.flatten().fieldErrors,
+        message: "Validation failed, please check form inputs"
+      }
+    } 
+
     const errors = error as Record<string, string[]>;
     return {
       success: false,
@@ -51,11 +88,6 @@ export const addProductAction = async (
 
   }
 
-  return {
-    success: true,
-    errors: {},
-    message: "Product submitted successfully!"
-  }
 }
 
 /*
