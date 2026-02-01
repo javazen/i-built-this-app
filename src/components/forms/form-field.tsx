@@ -9,7 +9,7 @@ interface FormFieldProps {
   placeholder?: string;
   required: boolean;
   onChange: (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
-  error: string;
+  error: string[];
   helperText?: string;
   textArea?: boolean;
 }
