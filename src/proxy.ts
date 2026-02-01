@@ -1,6 +1,46 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, clerkClient } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
-export default clerkMiddleware();
+export default clerkMiddleware(async (auth) => {
+  const { userId, orgId } = await auth();
+  if (!userId) {
+    return NextResponse.next();
+  }
+
+  if (!orgId) {
+    try {
+      // check if user has any org
+      const client = await clerkClient();
+      const { data: organizations } =
+        await client.users.getOrganizationMembershipList({ userId });
+
+      if (organizations.length > 0) {
+        return NextResponse.next();
+      }
+
+      const user = await client.users.getUser(userId);
+      const orgName =
+        user.fullName
+        ? `${user.fullName}'s Organization`
+        : user.firstName
+        ? `${user.firstName}'s Organization`
+        : user.username
+        ? `${user.username}'s Organization`
+        : user.primaryEmailAddress?.emailAddress
+        ? `${user.primaryEmailAddress?.emailAddress}'s Organization`
+        : "My Organization";
+
+      await client.organizations.createOrganization({
+        name: orgName,
+        createdBy: userId,
+      });      console.log(`Auto-created organization: ${orgName}`);
+    } catch (error) {
+      console.log('Error auto-creating organization: ', error);
+    }
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [
