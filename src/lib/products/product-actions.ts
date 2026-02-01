@@ -19,12 +19,20 @@ export const addProductAction = async (
   console.log(formData);
 
   try {
-    const { userId, emailAddresses } = await auth();
+    const { userId, orgId } = await auth();
     if (!userId) {
       return {
         success: false,
         errors: {},
         message: "You must be signed in to submit a product!"
+      }
+    }
+
+    if (!orgId) {
+      return {
+        success: false,
+        errors: {},
+        message: "You must be a member of an organization to submit a product!"
       }
     }
 
@@ -47,7 +55,7 @@ export const addProductAction = async (
     const tagsArray = tags 
       ? tags.filter((tag) => typeof tag === 'string')
       : [];
-      
+
     await db
     .insert(products)
     .values({
@@ -59,6 +67,7 @@ export const addProductAction = async (
       tags:tagsArray,
       status: 'pending', 
       submittedBy: userEmail, 
+      organizationId: orgId || "",
       userId
     })
 
