@@ -1,8 +1,9 @@
 import { CompassIcon, HomeIcon, SparkleIcon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Suspense } from "react";
+import HeaderAuth from "./header-auth";
 
 const Logo = () => {
   return (
@@ -56,7 +57,7 @@ export default function Header() {
                   Submit Project
                 </Link>
               </Button>
-              <UserButton />
+              <HeaderAuth />
             </SignedIn>
           </Suspense>
         </div>
