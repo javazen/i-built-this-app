@@ -23,16 +23,16 @@ export const addProductAction = async (
     if (!userId) {
       return {
         success: false,
-        errors: {},
-        message: "You must be signed in to submit a product!"
+        message: "You must be signed in to submit a product",
+        errors: undefined,
       }
     }
 
     if (!orgId) {
       return {
         success: false,
-        errors: {},
-        message: "You must be a member of an organization to submit a product!"
+        message: "You must be a member of an organization to submit a product",
+        errors: undefined,
       }
     }
 
@@ -43,7 +43,7 @@ export const addProductAction = async (
     const rawFormData = Object.fromEntries(formData.entries());
     const validatedData = productSchema.safeParse(rawFormData);
     if (!validatedData.success) {
-      console.log(validatedData.error.flatten());
+      console.log(validatedData.error.flatten().fieldErrors);
       return {
         success: false,
         errors: validatedData.error.flatten().fieldErrors,
@@ -88,10 +88,10 @@ export const addProductAction = async (
       }
     } 
 
-    const errors = error as Record<string, string[]>;
+//     const errors = error as Record<string, string[]>;
     return {
       success: false,
-      errors: errors,
+      errors: undefined,		// errors
       message: "Failed to submit product!"
     }
 
