@@ -15,11 +15,21 @@ export async function getFeaturedProducts() {
   return productsData;
 }
 
-export async function getAllProducts() {
+export async function getAllApprovedProducts() {
   const productsData = await db
     .select()
     .from(products)
-    .where(eq(products.status, 'approved'))
+    .where(eq(products.status, "approved"))
+    .orderBy(desc(products.voteCount));
+
+  return productsData;
+}
+
+export async function getAllProducts() {
+  "use cache";
+  const productsData = await db
+    .select()
+    .from(products)
     .orderBy(desc(products.voteCount));
 
   // console.log(productsData);
@@ -28,16 +38,13 @@ export async function getAllProducts() {
 
 export async function getRecentlyLaunchedProducts() {
   await connection();
-  // await new Promise((resolve) => setTimeout(resolve, 3000)); // test fallback
-  const productsData = await getAllProducts();
+  const productsData = await getAllApprovedProducts();
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-  // const recentProductsData = productsData;
-  const recentProductsData = productsData.filter((product) => 
-    product.createdAt && 
-    new Date(product.createdAt.toISOString()) >= oneWeekAgo
-  )
+  const recentProductsData = productsData.filter(
+    (product) => product.createdAt && product.createdAt >= oneWeekAgo
+  );
 
   // console.log(recentProductsData);
   return recentProductsData;
