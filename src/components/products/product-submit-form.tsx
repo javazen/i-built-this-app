@@ -2,12 +2,14 @@
 import FormField from "@/components/forms/form-field";
 import { Button } from "@/components/ui/button";
 import { addProductAction } from "@/lib/products/product-actions";
+import { cn } from "@/lib/utils";
+import { FormState } from "@/types";
 import { Loader2Icon, SparklesIcon } from "lucide-react";
 import { useActionState } from "react";
 
-const initialState = {
+const initialState: FormState = {
   success: false,
-  error: {},
+  errors: {},
   message: "",
 };
 
@@ -22,6 +24,17 @@ export default function ProductSubmitForm() {
 
   return (
     <form className="space-y-6" action={formAction}>
+      {message && (
+        <div className={cn(
+          "p-4 rounded-lg border",
+          success
+            ? "bg-primary/10 border-primary text-primary"
+            : "bg-destructive/10 border-destructive text-destructive"
+        )}
+        >
+          {message}
+        </div>
+      )}
       <FormField 
         label="Product Name"
         name="name"
@@ -49,7 +62,7 @@ export default function ProductSubmitForm() {
         required
         onChange={() => {}}
         error={getFieldErrors("description")}
-        textArea={true}
+        textarea
       />
       <FormField 
         label="Tagline"
