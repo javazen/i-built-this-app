@@ -11,7 +11,7 @@ interface FormFieldProps {
   onChange: (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
   error: string[];
   helperText?: string;
-  textArea?: boolean;
+  textarea?: boolean;
 }
 
 export default function FormField({
@@ -23,12 +23,12 @@ export default function FormField({
   onChange,
   error,
   helperText,
-  textArea
+  textarea,
 }:FormFieldProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      {textArea ? (
+      {textarea ? (
       <Textarea
         id={id}
         name={name}
