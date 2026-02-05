@@ -5,34 +5,30 @@ import { db } from "@/db";
 import { products } from "@/db/schema";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { productSchema } from "./product-validations";
+import { FormState } from "@/types";
 
-type FormState = {
-  success: boolean;
-  errors?: Record<string, string[]>
-  message: string;
-}
 
 export const addProductAction = async (
   prevState: FormState, 
   formData: FormData
 ): Promise<FormState> => {
-  console.log(formData);
+  // console.log(formData);
 
   try {
     const { userId, orgId } = await auth();
     if (!userId) {
       return {
         success: false,
-        message: "You must be signed in to submit a product",
-        errors: undefined,
+        errors: {},
+        message: "You must be signed in to submit a product!"
       }
     }
 
     if (!orgId) {
       return {
         success: false,
-        message: "You must be a member of an organization to submit a product",
-        errors: undefined,
+        errors: {},
+        message: "You must be a member of an organization to submit a product!"
       }
     }
 
@@ -43,7 +39,7 @@ export const addProductAction = async (
     const rawFormData = Object.fromEntries(formData.entries());
     const validatedData = productSchema.safeParse(rawFormData);
     if (!validatedData.success) {
-      console.log(validatedData.error.flatten().fieldErrors);
+      console.log(validatedData.error.flatten());
       return {
         success: false,
         errors: validatedData.error.flatten().fieldErrors,
@@ -64,8 +60,8 @@ export const addProductAction = async (
       description, 
       tagline, 
       websiteUrl, 
-      tags:tagsArray,
-      status: 'pending', 
+      tags: tagsArray,
+      status: "pending", 
       submittedBy: userEmail, 
       organizationId: orgId || "",
       userId
@@ -88,10 +84,10 @@ export const addProductAction = async (
       }
     } 
 
-//     const errors = error as Record<string, string[]>;
+    const errors = error as Record<string, string[]>;
     return {
       success: false,
-      errors: undefined,		// errors
+      errors: errors,
       message: "Failed to submit product!"
     }
 
