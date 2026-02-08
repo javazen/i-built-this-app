@@ -1,22 +1,12 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronUpIcon, ChevronDownIcon, StarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { StarIcon } from "lucide-react";
 import { InferSelectModel } from "drizzle-orm";
 import { products } from "@/db/schema";
+import VotingButtons from "./voting-buttons";
 
 type Product = InferSelectModel<typeof products>;
-
-// interface Product {
-//     id: number;
-//     name: string;
-//     description: string;
-//     tags: string[];
-//     votes: number;
-//     isFeatured: boolean;
-// }
 
 export default function ProductCard({ product }: { 
   product: Product }) {
@@ -42,27 +32,7 @@ export default function ProductCard({ product }: {
               <CardDescription>{product.description}</CardDescription>
             </div>
             {/** voting buttons */}
-            <div className="flex flex-col items-center gap-1 shrink-0">
-              <Button 
-                variant="ghost"
-                size="icon-sm"
-                className={cn("h-8 w-8 text-primary hover:bg-primary/20",
-                  hasVoted ? "text-destructive" : "opacity-50 cursor-not-allowed"
-                )}
-              >
-                <ChevronUpIcon className="size-5" />
-              </Button>
-              <span className="text-sm font-semibold transition-colors text-foreground">
-                {product.voteCount}
-              </span>
-              <Button 
-                variant="ghost"
-                size="icon-sm"
-                className="h-8 w-8 text-destructive hover:bg-primary/20"
-              >
-                <ChevronDownIcon className="size-5 text-destructive" />
-              </Button>
-            </div>
+            <VotingButtons hasVoted={hasVoted} voteCount={product.voteCount} productId = {product.id} />
           </div>
         </CardHeader>
         <CardFooter>
