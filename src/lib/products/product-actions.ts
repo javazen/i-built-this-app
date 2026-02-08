@@ -6,6 +6,8 @@ import { products } from "@/db/schema";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { productSchema } from "./product-validations";
 import { FormState } from "@/types";
+import { eq, sql } from "drizzle-orm";
+import { refresh, revalidatePath } from "next/cache";
 
 
 export const addProductAction = async (
@@ -67,6 +69,8 @@ export const addProductAction = async (
       userId
     })
 
+    refresh();
+
     return {
       success: true,
       errors: {},
@@ -90,10 +94,100 @@ export const addProductAction = async (
       errors: errors,
       message: "Failed to submit product!"
     }
-
   }
-
 }
+
+export const upvoteProductAction = async (
+  productId: number
+) => {
+  try {
+    const { userId, orgId } = await auth();
+    if (!userId) {
+      console.log("not signed in");
+      return {
+        success: false,
+        errors: {},
+        message: "You must be signed in to vote!"
+      }
+    }
+
+    if (!orgId) {
+      console.log("not part of an organization");
+      return {
+        success: false,
+        errors: {},
+        message: "You must be a member of an organization to vote!"
+      }
+    }
+
+    await db
+    .update(products)
+    .set({
+      voteCount: sql`GREATEST(0, vote_count + 1)`,
+    })
+    .where( eq(products.id, productId) );
+
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: "Product upvoted!",
+    }
+
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Failed to upvote product!"
+    }
+  }
+};
+
+export const downvoteProductAction = async (
+  productId: number
+) => {
+  try {
+    const { userId, orgId } = await auth();
+    if (!userId) {
+      console.log("not signed in");
+      return {
+        success: false,
+        errors: {},
+        message: "You must be signed in to vote!"
+      }
+    }
+
+    if (!orgId) {
+      console.log("not part of an organization");
+      return {
+        success: false,
+        errors: {},
+        message: "You must be a member of an organization to vote!"
+      }
+    }
+
+    await db
+    .update(products)
+    .set({
+      voteCount: sql`GREATEST(0, vote_count - 1)`,
+    })
+    .where( eq(products.id, productId) );
+
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: "Product downvoted!",
+    }
+
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Failed to downvote product!"
+    }
+  }
+};
 
 /*
   console.log(formData.get('name'));
