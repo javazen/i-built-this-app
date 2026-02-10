@@ -49,3 +49,10 @@ export async function getRecentlyLaunchedProducts() {
   // console.log(recentProductsData);
   return recentProductsData;
 }
+
+export async function getProductsBySlug(slug: string) {
+  const product = await db.select().from(products)
+    .where(eq(products.slug, slug));
+
+  return product?.[0] ?? null;
+}
