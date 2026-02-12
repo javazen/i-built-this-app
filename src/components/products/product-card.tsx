@@ -35,7 +35,9 @@ export default function ProductCard({ product }: {
         <CardFooter>
           <div className="flex items-center gap-2">
             {product.tags?.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
+              <Badge variant="secondary" key={tag}>
+                {tag}
+              </Badge>
             ))}
           </div>
         </CardFooter>

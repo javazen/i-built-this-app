@@ -1,4 +1,4 @@
-"use cache"
+"use cache";
 import SectionHeader from "@/components/common/section-header";
 import ProductExplorer from "@/components/products/product-explorer";
 import { getAllProducts } from "@/lib/products/product-select";

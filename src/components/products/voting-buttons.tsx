@@ -47,8 +47,11 @@ export default function VotingButtons({
         onClick={handleUpvote}
         variant="ghost"
         size="icon-sm"
-        className={cn("h-8 w-8 text-primary hover:bg-primary/20",
-          hasVoted ? "opacity-50 cursor-not-allowed" : "text-destructive"
+        className={cn(
+          "h-8 w-8 text-primary ",
+          hasVoted
+            ? "bg-primary/10 text-primary hover:bg-primary/20"
+            : "hover:bg-primary/10 hover:text-primary"
         )}
         disabled={isPending}
       >
@@ -61,12 +64,13 @@ export default function VotingButtons({
         onClick={handleDownvote}
         variant="ghost"
         size="icon-sm"
-        className={cn("h-8 w-8 text-primary hover:bg-primary/20",
-          hasVoted ? "opacity-50 cursor-not-allowed" : "text-destructive"
-        )}
         disabled={isPending}
+        className={cn(
+          "h-8 w-8 text-primary ",
+          hasVoted ? "hover:text-destructive" : "opacity-50 cursor-not-allowed"
+        )}
       >
-        <ChevronDownIcon className="size-5 text-destructive" />
+        <ChevronDownIcon className="size-5" />
       </Button>
     </div>
   );
