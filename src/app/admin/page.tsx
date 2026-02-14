@@ -1,10 +1,11 @@
 import SectionHeader from "@/components/common/section-header";
 import StatsCard from "@/components/admin/stats-card";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { ShieldIcon } from "lucide-react";
+import { InboxIcon, ShieldIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getAllProducts } from "@/lib/products/product-select";
 import AdminProductCard from "@/components/admin/admin-product-card";
+import EmptyState from "@/components/common/empty-state";
 
 export default async function AdminPage() {
   const { userId } = await auth();
@@ -57,6 +58,12 @@ export default async function AdminPage() {
             </h2>
           </div>
           <div className="space-y-4">
+            {pendingProducts.length === 0 && (
+              <EmptyState
+                message="No pending products to review"
+                icon={InboxIcon}
+              />
+            )}
             {pendingProducts.map((product) => (
               <AdminProductCard key={product.id} product={product} />
             ))}
